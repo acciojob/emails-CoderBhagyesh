@@ -6,16 +6,16 @@ import java.util.Deque;
 import java.util.LinkedList;
 
 public class Gmail extends Email {
-
-    int numOfMails = 0;
     int inboxCapacity; //maximum number of mails inbox can store
     //Inbox: Stores mails. Each mail has date (Date), sender (String), message (String). It is guaranteed that message is distinct for all mails.
-    Deque<Mail> inbox = new LinkedList<>();
+    Deque<Mail> inbox;
     //Trash: Stores mails. Each mail has date (Date), sender (String), message (String)
-    ArrayList<Mail> trash = new ArrayList<>();
+    ArrayList<Mail> trash;
     public Gmail(String emailId, int inboxCapacity) {
         super(emailId);
         this.inboxCapacity = inboxCapacity;
+        inbox = new LinkedList<>();
+        trash = new ArrayList<>();
     }
 
     public void receiveMail(Date date, String sender, String message){
@@ -23,7 +23,7 @@ public class Gmail extends Email {
         // It is guaranteed that:
         // 1. Each mail in the inbox is distinct.
         // 2. The mails are received in non-decreasing order. This means that the date of a new mail is greater than equal to the dates of mails received already.
-        if(inbox.size()>inboxCapacity) {
+        if(inbox.size()>=inboxCapacity) {
            trash.add(inbox.removeLast());
            inbox.addFirst(new Mail(date,sender,message));
         } else {
@@ -48,7 +48,7 @@ public class Gmail extends Email {
         // If the inbox is empty, return null
         // Else, return the message of the latest mail present in the inbox
         if(inbox.size()==0) {
-            return "null";
+            return null;
         } else {
             Mail m = inbox.getFirst();
             return m.getMessage();
@@ -60,7 +60,7 @@ public class Gmail extends Email {
         // If the inbox is empty, return null
         // Else, return the message of the oldest mail present in the inbox
         if(inbox.size()==0) {
-            return "null";
+            return null;
         } else {
             Mail m = inbox.getLast();
             return m.getMessage();
@@ -91,13 +91,12 @@ public class Gmail extends Email {
 
     public void emptyTrash(){
         // clear all mails in the trash
-        trash.clear();
-        return;
+        trash = new ArrayList<>();
     }
 
     public int getInboxCapacity() {
         // Return the maximum number of mails that can be stored in the inbox
-        return inboxCapacity;
+        return this.inboxCapacity;
     }
 }
 
